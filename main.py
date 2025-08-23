@@ -19,10 +19,21 @@ def install_dependencies():
 
 def main():
     """Main function to run the investment bot"""
+    print("🚀 Starting Investment Bot...")
+    
+    # Try the fixed version first
     try:
-        # Import and run the main bot
+        from investment_bot_fixed import main as run_bot
+        print("🔧 Running fixed investment bot...")
+        run_bot()
+        return
+    except Exception as e:
+        print(f"❌ Fixed bot failed: {e}")
+    
+    # Try original bot
+    try:
         from investment_bot import main as run_bot
-        print("🚀 Starting Investment Bot...")
+        print("🔧 Running original bot...")
         run_bot()
     except ImportError as e:
         print(f"❌ Import error: {e}")
@@ -33,27 +44,27 @@ def main():
             run_bot()
         except Exception as e2:
             print(f"❌ Still failing: {e2}")
-            print("🔧 Running in test mode...")
-            run_test_mode()
+            print("🔧 Running simple test as fallback...")
+            run_simple_test()
     except Exception as e:
         print(f"❌ Error running bot: {e}")
-        print("🔧 Running in test mode...")
-        run_test_mode()
+        print("🔧 Running simple test as fallback...")
+        run_simple_test()
 
-def run_test_mode():
-    """Run in test mode with HTML report generation"""
+def run_simple_test():
+    """Run simple test as fallback"""
     try:
-        from test_html_report import main as run_test
+        from simple_test import main as run_test
         run_test()
     except Exception as e:
-        print(f"❌ Test mode also failed: {e}")
+        print(f"❌ Simple test also failed: {e}")
         print("📋 Available files:")
         os.system("ls -la")
         print("\n📦 Trying to install dependencies manually...")
         install_dependencies()
         print("🔄 Final retry...")
         try:
-            from test_html_report import main as run_test
+            from simple_test import main as run_test
             run_test()
         except Exception as e2:
             print(f"❌ Final failure: {e2}")
